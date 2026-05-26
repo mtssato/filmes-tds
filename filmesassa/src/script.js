@@ -1,204 +1,62 @@
-// ===============================
-// ARRAY DE FILMES
-// ===============================
-
-const filmes = [
-    {
-        id: 1,
-        titulo: "Interestelar",
-        genero: ["Sci-Fi", "Drama"],
-        ano: 2014,
-        nota: 8.9,
-        imagem_url:
-            "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
-    },
-
-    {
-        id: 2,
-        titulo: "Batman: O Cavaleiro das Trevas",
-        genero: ["Ação", "Drama"],
-        ano: 2008,
-        nota: 9.0,
-        imagem_url:
-            "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
-    },
-
-    {
-        id: 3,
-        titulo: "Vingadores: Ultimato",
-        genero: ["Ação", "Sci-Fi"],
-        ano: 2019,
-        nota: 8.4,
-        imagem_url:
-            "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg"
-    },
-
-    {
-        id: 4,
-        titulo: "Coringa",
-        genero: ["Drama"],
-        ano: 2019,
-        nota: 8.5,
-        imagem_url:
-            "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg"
-    },
-
-    {
-        id: 5,
-        titulo: "Invocação do Mal",
-        genero: ["Terror"],
-        ano: 2013,
-        nota: 7.5,
-        imagem_url:
-            "https://image.tmdb.org/t/p/w500/wVYREutTvI2tmxr6ujrHT704wGF.jpg"
-    },
-
-    {
-        id: 6,
-        titulo: "Projeto X",
-        genero: ["Comédia"],
-        ano: 2012,
-        nota: 6.7,
-        imagem_url:
-            "https://image.tmdb.org/t/p/w500/kqjL17yufvn9OVLyXYpvtyrFfak.jpg"
-    },
-
-    {
-        id: 7,
-        titulo: "Duna",
-        genero: ["Sci-Fi", "Drama"],
-        ano: 2021,
-        nota: 8.1,
-        imagem_url:
-            "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg"
-    },
-
-    {
-        id: 8,
-        titulo: "John Wick",
-        genero: ["Ação"],
-        ano: 2014,
-        nota: 7.9,
-        imagem_url:
-            "https://image.tmdb.org/t/p/w500/fZPSd91yGE9fCcCe6OoQr6E3Bev.jpg"
-    },
-
-    {
-        id: 9,
-        titulo: "Hereditário",
-        genero: ["Terror", "Drama"],
-        ano: 2018,
-        nota: 7.3,
-        imagem_url:
-            "https://image.tmdb.org/t/p/w500/p9fmuz2Oj3HtEJEqbIwkFGUhVXD.jpg"
-    },
-
-    {
-        id: 10,
-        titulo: "Se Beber Não Case",
-        genero: ["Comédia"],
-        ano: 2009,
-        nota: 7.7,
-        imagem_url:
-            "https://image.tmdb.org/t/p/w500/uluhlXubGu1VxU63X9VHCLWDAYP.jpg"
-    }
+const db = [
+    // FILMES
+    { id: 1, title: "Oppenheimer", type: "movie", genre: "Drama", rating: "9.1", img: "https://via.placeholder.com/400x250/111/00d2ff?text=Oppenheimer" },
+    { id: 2, title: "Duna: Parte 2", type: "movie", genre: "Sci-Fi", rating: "8.9", img: "https://via.placeholder.com/400x250/111/00d2ff?text=Dune+2" },
+    { id: 3, title: "John Wick 4", type: "movie", genre: "Ação", rating: "8.2", img: "https://via.placeholder.com/400x250/111/00d2ff?text=John+Wick" },
+    { id: 4, title: "Spiderman: Across", type: "movie", genre: "Animação", rating: "9.0", img: "https://via.placeholder.com/400x250/111/00d2ff?text=Spiderman" },
+    
+    // FUTEBOL
+    { id: 5, title: "Real Madrid vs Man. City", type: "football", genre: "Champions League", rating: "LIVE", img: "https://via.placeholder.com/400x250/111/39ff14?text=Champions+League" },
+    { id: 6, title: "Brasil vs Argentina", type: "football", genre: "Eliminatórias", rating: "Replay", img: "https://via.placeholder.com/400x250/111/39ff14?text=Brasil+x+Arg" },
+    { id: 7, title: "Liverpool vs Arsenal", type: "football", genre: "Premier League", rating: "90'", img: "https://via.placeholder.com/400x250/111/39ff14?text=Premier+League" },
+    { id: 8, title: "Flamengo vs Palmeiras", type: "football", genre: "Brasileirão", rating: "Highlights", img: "https://via.placeholder.com/400x250/111/39ff14?text=Brasileirao" },
+    { id: 9, title: "Final da Libertadores", type: "football", genre: "Copa Libertadores", rating: "Full Match", img: "https://via.placeholder.com/400x250/111/39ff14?text=Libertadores" }
 ];
 
-// ===============================
-// SELETORES
-// ===============================
+const mainGrid = document.getElementById('mainGrid');
+const navItems = document.querySelectorAll('.nav-item');
+const mainSearch = document.getElementById('mainSearch');
 
-const moviesContainer = document.getElementById("moviesContainer");
-const searchInput = document.getElementById("searchInput");
-const filterButtons = document.querySelectorAll(".filter-btn");
+function renderContent(filterType = 'all', searchTerm = '') {
+    mainGrid.innerHTML = '';
 
-// ===============================
-// FUNÇÃO PARA MOSTRAR FILMES
-// ===============================
+    const filtered = db.filter(item => {
+        const matchesType = filterType === 'all' || item.type === filterType;
+        const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesType && matchesSearch;
+    });
 
-function renderMovies(listaFilmes) {
-
-    moviesContainer.innerHTML = "";
-
-    listaFilmes.forEach((filme) => {
-
-        const card = document.createElement("div");
-
-        card.classList.add("movie-card");
-
+    filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'item-card';
         card.innerHTML = `
-            <img src="${filme.imagem_url}" alt="${filme.titulo}">
-
-            <div class="movie-info">
-
-                <h2 class="movie-title">
-                    ${filme.titulo}
-                </h2>
-
-                <div class="movie-meta">
-                    <span>${filme.ano}</span>
-
-                    <span class="movie-rating">
-                        ⭐ ${filme.nota}
-                    </span>
-                </div>
+            <img src="${item.img}" alt="${item.title}">
+            <span class="badge ${item.type === 'movie' ? 'type-movie' : 'type-football'}">
+                ${item.type === 'movie' ? 'Filme' : 'Futebol'}
+            </span>
+            <div class="item-info">
+                <h3>${item.title}</h3>
+                <p style="font-size: 0.8rem; color: #888;">${item.genre} • ${item.rating}</p>
             </div>
         `;
-
-        moviesContainer.appendChild(card);
+        mainGrid.appendChild(card);
     });
 }
 
-// ===============================
-// FILTRO POR GÊNERO
-// ===============================
-
-filterButtons.forEach((button) => {
-
-    button.addEventListener("click", () => {
-
-        // Remove active
-        filterButtons.forEach((btn) =>
-            btn.classList.remove("active")
-        );
-
-        // Adiciona active
-        button.classList.add("active");
-
-        const categoria = button.dataset.filter;
-
-        // TODOS
-        if (categoria === "Todos") {
-            renderMovies(filmes);
-            return;
-        }
-
-        // FILTRAR
-        const filmesFiltrados = filmes.filter((filme) =>
-            filme.genero.includes(categoria)
-        );
-
-        renderMovies(filmesFiltrados);
+// Eventos de Navegação
+navItems.forEach(btn => {
+    btn.addEventListener('click', () => {
+        navItems.forEach(i => i.classList.remove('active'));
+        btn.classList.add('active');
+        renderContent(btn.dataset.type);
     });
 });
 
-// ===============================
-// PESQUISA EM TEMPO REAL
-// ===============================
-
-searchInput.addEventListener("input", () => {
-
-    const valor = searchInput.value.toLowerCase();
-
-    const filmesFiltrados = filmes.filter((filme) =>
-        filme.titulo.toLowerCase().includes(valor)
-    );
-
-    renderMovies(filmesFiltrados);
+// Evento de Busca
+mainSearch.addEventListener('input', (e) => {
+    const activeType = document.querySelector('.nav-item.active').dataset.type;
+    renderContent(activeType, e.target.value);
 });
 
-// ===============================
-// INICIALIZAÇÃO
-// ===============================
-
-renderMovies(filmes);
+// Início
+renderContent();
